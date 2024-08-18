@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { ModulusWeight } from './interfaces';
-import { AccountDetailIndex } from './constants';
+import { AccountDetailIndex } from './enums';
 
 const loadSubstitutionMap = (): { [key: string]: string } =>
   readFileSync(`${__dirname}/data/scsubtab.txt`, 'utf8')

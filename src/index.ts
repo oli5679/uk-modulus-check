@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { ModulusWeight } from './interfaces';
-import { CheckType } from './constants';
+import { CheckType } from './enums';
 import {
   applyAccountDetailExceptionRules,
   applyWeightValueExceptionRules,
