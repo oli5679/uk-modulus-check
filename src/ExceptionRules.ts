@@ -1,12 +1,6 @@
-import { readFileSync } from 'fs';
 import { ModulusWeight } from './interfaces';
 import { AccountDetailIndex } from './enums';
-
-const loadSubstitutionMap = (): { [key: string]: string } =>
-  readFileSync(`${__dirname}/data/scsubtab.txt`, 'utf8')
-    .split('\r\n')
-    .map((line) => line.split(/\s+/))
-    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+import { fetchSubstitutionMap } from './dataLoader';
 
 const applyLengthAdjustments = (
   sortCode: string,
@@ -32,7 +26,7 @@ const applyExceptionAdjustments = (
   modulusWeightException: number | null
 ): { sortCode: string; accountNumber: string } => {
   let [adjustedSortCode, adjustedAccountNumber] = [sortCode, accountNumber];
-  let substitutionMap = loadSubstitutionMap();
+  let substitutionMap = fetchSubstitutionMap();
   if (modulusWeightException === 5 && substitutionMap[sortCode]) {
     adjustedSortCode = substitutionMap[sortCode];
   } else if (modulusWeightException === 8) {
