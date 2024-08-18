@@ -18,6 +18,8 @@ From time to time, Vocalink updates the txt files here mapping sort-code ranges 
 npm install uk-modulus-check
 ```
 
+See [here](https://www.npmjs.com/package/uk-modulus-check) for the NPM package.
+
 ## Usage
 
 
