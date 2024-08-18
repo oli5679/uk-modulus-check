@@ -1,7 +1,6 @@
 import { readFileSync } from 'fs';
 import { CheckType } from './enums';
 import { ModulusWeight } from './interfaces';
-import { z } from 'zod';
 
 const loadSubstitutionMap = (): { [key: string]: string } =>
   readFileSync(`${__dirname}/data/scsubtab.txt`, 'utf8')
