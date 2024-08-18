@@ -2,8 +2,6 @@ import {readFileSync} from 'fs';
 
 import { ModulusWeight, ModCheck, AccountDetailIndexes} from './interfaces';
 
-// create modCheck function
-
 export const getWeightValues = (modulusWeight: ModulusWeight, accountDetails: string): number[] => {
   let weightings = modulusWeight.weights;
   const ab = accountDetails.slice(AccountDetailIndexes.a, AccountDetailIndexes.b+1);
@@ -12,6 +10,15 @@ export const getWeightValues = (modulusWeight: ModulusWeight, accountDetails: st
       for (let i = 0; i < AccountDetailIndexes.b+1; i++){
         weightings[i] = 0;
       }      
+    }
+  }
+  if (modulusWeight.exception === 2) {
+    const a = accountDetails[AccountDetailIndexes.a];
+    const g = accountDetails[AccountDetailIndexes.g];
+    if (a !== '0' && g !== '9') {
+      weightings = [0, 0, 1, 2, 5, 3, 6, 4, 8, 7, 10, 9, 3, 1];
+    } else if (a !== '0' && g === '9') {
+      weightings = [0, 0, 0, 0, 0, 0, 0, 0, 8, 7, 10, 9, 3, 1];
     }
   }
   return weightings;
@@ -31,6 +38,9 @@ export default class ModulusValidator {
     let accountDetails = this.combineAccountDetails(sortCode, accountNumber, modulusWeight.exception);
     const weightValues = getWeightValues(modulusWeight, accountDetails);
     const ab = accountDetails.slice(AccountDetailIndexes.a, AccountDetailIndexes.b+1);
+    const g = parseInt(accountDetails[AccountDetailIndexes.g], 10);
+    const h = parseInt(accountDetails[AccountDetailIndexes.h], 10);
+  
     const aValue = accountDetails[AccountDetailIndexes.a];
   
     // exception 3 is a special case where the first digit of the account number must be 1 or 9
@@ -72,12 +82,16 @@ export default class ModulusValidator {
           return true;
         }
       }
-      console.log(total);
-      if (modulusWeight.mod === ModCheck.MOD10){
-        
+      if (modulusWeight.exception == 5) {
+        const remainder = total % 11;
+        if ((remainder === 0 && g === 0) || (remainder !== 1 && 11 - remainder === g)) {
+            return true;
+        }
+        return false;
+      }
 
+      if (modulusWeight.mod === ModCheck.MOD10){
         return total % 10 === 0;
-        
       }
       else if (modulusWeight.mod === ModCheck.MOD11){
         return total % 11 === 0;
@@ -89,10 +103,12 @@ export default class ModulusValidator {
     }
     // this case has a different treatment of 2 digit values --> 18 becomes 1 + 8
     if (modulusWeight.mod === ModCheck.DBLAL) {
-      // turn multiplicationResultArray into a string
-      const concatenatedString = multiplicationResultArray.join('');
       // sum the individual digits of the string
-      let total = concatenatedString.split('').reduce((acc, curr) => acc + parseInt(curr, 10), 0);
+      let total = multiplicationResultArray
+        .map(num => num.toString())
+        .join('')
+        .split('')
+        .reduce((acc, digit) => acc + parseInt(digit, 10), 0);
       // exception 1 is a special case where the total is incremented by 27
       if (modulusWeight.exception == 1){
         total += 27;
@@ -124,6 +140,10 @@ export default class ModulusValidator {
     if (modulusWeightException === 8){
       sortCodeAdjusted = '090126';
     }  
+    if (modulusWeightException === 9){
+      sortCodeAdjusted = '309634';
+    }
+
     // prefix 6 digit account numbers with two zeros
     if (accountNumber.length === 6) {
       accountCodeAdjusted = '00' + accountNumber;
@@ -132,6 +152,7 @@ export default class ModulusValidator {
     if (accountNumber.length === 7) {
       accountCodeAdjusted = '0' + accountNumber;
     }
+
     // Nine digit account numbers
     // Replace the last digit of the sorting code with the first digit of the account number, then usethe last eight digits of the account number
   
@@ -170,16 +191,14 @@ export default class ModulusValidator {
     // use the first matching modulus weight to check the account number
     const firstModulusWeight = matchingModulusWeights[0];
     const firstModulusCheck = this.modulusCheck(firstModulusWeight, sortCode, accountNumber);
-    if (firstModulusCheck){
+    if ((firstModulusCheck)){
       return true;
     }
     if ((firstModulusWeight.exception === null) || (matchingModulusWeights.length == 1)  ){
-    
       return false;
     }
     else {
       return this.modulusCheck(matchingModulusWeights[1], sortCode, accountNumber);
-      
     }
   }
 
