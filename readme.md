@@ -8,6 +8,10 @@ It only users vanilla typescript, and the 'fs' file-loading library.
 
 From time to time, Vocalink updates the txt files here mapping sort-code ranges to validation weights. We currently use `v7-90` (valid from 17 August 2024). 
 
+## Status
+
+![Build Status](https://github.com/oli5679/uk-modulus-check/actions/workflows/ci.yml/badge.svg)
+
 ## Installation
 
 ```
