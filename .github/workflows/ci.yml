@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - main  # or specify the branches you want to trigger the tests on
+  pull_request:
+    branches:
+      - main  # or specify the branches you want to trigger the tests on
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16, 18]  # Specify the Node.js versions you want to test against
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
