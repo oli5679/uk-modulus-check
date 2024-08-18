@@ -8,6 +8,10 @@ It only users vanilla typescript, and the 'fs' file-loading library.
 
 From time to time, Vocalink updates the txt files here mapping sort-code ranges to validation weights. We currently use `v7-90` (valid from 17 August 2024). 
 
+## Status
+
+![Build Status](https://github.com/oli5679/uk-modulus-check/actions/workflows/ci.yml/badge.svg)
+
 ## Installation
 
 ```
@@ -16,13 +20,12 @@ npm install uk-modulus-check
 
 ## Usage
 ```
-const ModulusChecker = require('uk-modulus-check');
+import ModulusChecker from "uk-modulus-check";
 
-const modulusChecker = new ModulusChecker();
+const checker = new ModulusChecker();
 
-console.log(modulusChecker.validate('180002', '00000190')); // true
-
-console.log(modulusChecker.validate('938063', '15763217')); // false
+console.log(checker.validate('180002', '00000190')); // true
+console.log(checker.validate('938063', '15763217')); // false
 ```
 
 
