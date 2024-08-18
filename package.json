@@ -1,16 +1,23 @@
 {
-  "name": "uk-modulus-validator",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "uk-modulus-check",
+  "version": "1.0.6",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "homepage": "https://github.com/oli5679/uk-modulus-check",
+  "bugs": "https://github.com/oli5679/uk-modulus-check/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oli5679/uk-modulus-check.git"
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp -r src/data dist/data",
     "test": "jest",
 
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'"
   },
-  "keywords": [],
+  "keywords": [ "vocalink", "modulus", "check", "uk", "bank", "account", "validation" ],
   "author": "Oliver Cairns",
-  "license": "ISC",
   "description": "",
   "devDependencies": {
     "@types/jest": "^29.5.12",

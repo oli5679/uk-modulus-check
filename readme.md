@@ -1,35 +1,34 @@
-# UKModulusValidator
+# UKModulusCheck
 
 ## Overview
 
-ModulusValidator is a TypeScript class designed to validate UK bank account details using the modulus checking algorithm. 
+TypeScript class that validates UK bank account details using the modulus checking algorithm. 
 
-It only using vanilla typescript, and the 'fs' file-loading library. 
+It only users vanilla typescript, and the 'fs' file-loading library. 
 
 From time to time, Vocalink updates the txt files here mapping sort-code ranges to validation weights. We currently use `v7-90` (valid from 17 August 2024). 
-s
-## Usage
-
-```
-import ModulusChecker from 'UKModulusCheck';
-
-let checker = new ModulusCheck()
-
-checker.validate({ sortCode:  '180002', accountNumber: '00000190'})
-# true
-
-checker.validate({ sortCode:  '938063', accountNumber: '15763217'})
-# false
-```
-', accountNumber: '', expectedResult: true
 
 ## Installation
 
-[todo add to npm and add]
+```
+npm install uk-modulus-check
+```
+
+## Usage
+```
+const ModulusChecker = require('uk-modulus-check');
+
+const modulusChecker = new ModulusChecker();
+
+console.log(modulusChecker.validate('180002', '00000190')); // true
+
+console.log(modulusChecker.validate('938063', '15763217')); // false
+```
+
 
 ## Details
 
-[This](https://www.vocalink.com/media/a2febq5m/validating-account-numbers-uk-modulus-checking-v7-90.pdf) specification details logic to differentiate valid vs. invaid pairs of sort-code and account number. 
+[This](https://www.vocalink.com/media/a2febq5m/validating-account-numbers-uk-modulus-checking-v7-90.pdf) specification details logic to differentiate valid vs. invalid pairs of sort-code and account number. 
 
 A mathematical algorithm compares the two values, and check if the two can be paired together legitimately.
 
@@ -42,7 +41,9 @@ MIT
 
 ## Credits
 
-Many thanks to bazerk/uk-modulus-checking for inspiration (Python)
+Many thanks to [bazerk/uk-modulus-checking](https://github.com/bazerk/uk-modulus-checking) for inspiration (Python)
 
-Also thanks to uphold/uk-modulus-checking for creating a good Javascript implementation. It doesn't seem to be updated since valacdos-v640, which motivats the create (12/10/2020)
+Also thanks to [uphold/uk-modulus-checking](https://github.com/uphold/uk-modulus-checking) for creating a good Javascript implementation. It doesn't seem to be updated since valacdos-v640 (12/10/2020), which motivates the creation of this package
+
+
 
