@@ -1,6 +1,6 @@
 {
   "name": "uk-modulus-check",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -13,10 +13,17 @@
   "scripts": {
     "build": "tsc && cp -r src/data dist/data",
     "test": "jest",
-
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'"
   },
-  "keywords": [ "vocalink", "modulus", "check", "uk", "bank", "account", "validation" ],
+  "keywords": [
+    "vocalink",
+    "modulus",
+    "check",
+    "uk",
+    "bank",
+    "account",
+    "validation"
+  ],
   "author": "Oliver Cairns",
   "description": "",
   "devDependencies": {
@@ -33,6 +40,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "zod": "^3.23.8"
   }
 }
