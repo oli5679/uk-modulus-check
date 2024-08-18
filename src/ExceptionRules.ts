@@ -1,6 +1,6 @@
 import { ModulusWeight } from './interfaces';
 import { AccountDetailIndex } from './enums';
-import { fetchSubstitutionMap } from './dataLoader';
+import { fetchSubstitutionMap } from './dataLoaders';
 
 const applyLengthAdjustments = (
   sortCode: string,
@@ -22,10 +22,9 @@ const applyLengthAdjustments = (
 
 const applyExceptionAdjustments = (
   sortCode: string,
-  accountNumber: string,
   modulusWeightException: number | null
-): { sortCode: string; accountNumber: string } => {
-  let [adjustedSortCode, adjustedAccountNumber] = [sortCode, accountNumber];
+): string => {
+  let [adjustedSortCode] = [sortCode];
   let substitutionMap = fetchSubstitutionMap();
   if (modulusWeightException === 5 && substitutionMap[sortCode]) {
     adjustedSortCode = substitutionMap[sortCode];
@@ -34,7 +33,7 @@ const applyExceptionAdjustments = (
   } else if (modulusWeightException === 9) {
     adjustedSortCode = '309634';
   }
-  return { sortCode: adjustedSortCode, accountNumber: adjustedAccountNumber };
+  return adjustedSortCode;
 };
 
 export const applyAccountDetailExceptionRules = (
@@ -46,15 +45,11 @@ export const applyAccountDetailExceptionRules = (
     sortCode: lengthAdjustedSortCode,
     accountNumber: lengthAdjustedAccountNumber,
   } = applyLengthAdjustments(sortCode, accountNumber);
-  const {
-    sortCode: exceptionAdjustedSortCode,
-    accountNumber: exceptionAdjustedAccountNumber,
-  } = applyExceptionAdjustments(
+  const exceptionAdjustedSortCode = applyExceptionAdjustments(
     lengthAdjustedSortCode,
-    lengthAdjustedAccountNumber,
     modulusWeightException
   );
-  return exceptionAdjustedSortCode + exceptionAdjustedAccountNumber;
+  return exceptionAdjustedSortCode + lengthAdjustedAccountNumber;
 };
 
 export const applyWeightValueExceptionRules = (
@@ -92,16 +87,13 @@ export const applyOverwriteExceptionRules = (
   modulusWeight: ModulusWeight,
   accountDetails: string
 ): { modifiedAccountDetails: string; overwriteResult: boolean | null } => {
-  const a = accountDetails[AccountDetailIndex.A];
-  const g = accountDetails[AccountDetailIndex.G];
-  const h = accountDetails[AccountDetailIndex.H];
-
-  // exception 3 is a special case where the first digit of the account number must be 1 or 9
-  if (modulusWeight.exception === 3 && ['1', '9'].includes(a)) {
+  const {
+    [AccountDetailIndex.A]: a,
+    [AccountDetailIndex.G]: g,
+    [AccountDetailIndex.H]: h,
+  } = accountDetails;
+  if (modulusWeight.exception === 3 && ['1', '9'].includes(a))
     return { modifiedAccountDetails: accountDetails, overwriteResult: true };
-  }
-
-  // exception 6 is a special case where the first digit of the account number must be between 4 and 10 and the 7th and 8th digits must be the same
   if (
     modulusWeight.exception === 6 &&
     parseInt(a, 10) >= 4 &&
@@ -134,12 +126,10 @@ export const applyPostTotalExceptionRules = (
     adjustedTotal += 27;
   }
   if (exception == 4) {
-    const remainder = total % 11;
-    const checkDigit = parseInt(
-      accountDetails.substring(accountDetails.length - 2),
-      10
-    );
-    if (remainder === checkDigit) {
+    if (
+      total % 11 ===
+      parseInt(accountDetails.substring(accountDetails.length - 2), 10)
+    ) {
       overwriteResult2 = true;
     }
   }

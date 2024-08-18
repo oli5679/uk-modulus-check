@@ -1,14 +1,12 @@
-import { readFileSync } from 'fs';
 import { ModulusWeight } from './interfaces';
 import { CheckType } from './enums';
-import { z } from 'zod';
 import {
   applyAccountDetailExceptionRules,
   applyWeightValueExceptionRules,
   applyOverwriteExceptionRules,
   applyPostTotalExceptionRules,
 } from './ExceptionRules';
-import { fetchModulusWeights } from './dataLoader';
+import { fetchModulusWeights } from './dataLoaders';
 
 export default class ModulusChecker {
   private modulusWeighstArray: ModulusWeight[];
@@ -59,8 +57,7 @@ export default class ModulusChecker {
     } else {
       total = multiplicationResultArray.reduce((acc, curr) => acc + curr, 0);
     }
-
-    // there are acceptions that are applied after the total has been calculated
+    // there are exceptions that are applied after the total has been calculated
     // these can either adjust the total, or require a non-standard modulus check
     const { adjustedTotal, overwriteResult2 } = applyPostTotalExceptionRules(
       modulusWeight.exception,
@@ -68,34 +65,32 @@ export default class ModulusChecker {
       accountDetails
     );
     if (overwriteResult2 !== null) return overwriteResult2;
-
     const checkTypeValue =
       modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
     return adjustedTotal % checkTypeValue === 0;
   };
 
   validate(sortCode: string, accountNumber: string): boolean {
-    // sort code must be 6 digits and account number must be between 6 and 10 digits
+    // sort code must be 6 digits, account number must be between 6 and 10 digits
     if (
       accountNumber.length <= 6 ||
       accountNumber.length >= 10 ||
       sortCode.length !== 6
     )
       return false;
-
-    // check if there are any non-numeric characters in the sort code or account number
+    // sort code and account number must be numeric
     if (!/^\d+$/.test(sortCode + accountNumber)) return false;
-
+    // find the modulus weight that matches the sort code
     const matchingModulusWeights = this.modulusWeighstArray.filter(
       (weight) =>
         parseInt(sortCode, 10) >= weight.start &&
         parseInt(sortCode, 10) <= weight.end
     );
-    // there must be at least one matching modulus weight, otherwise return the default behaviour
+    // if there are no matching modulus weights, the sort code is not recognised
     if (!matchingModulusWeights.length) return this.unseenSortCodeBehaviour;
-
-    // return true if any of the matching modulus weights pass the modulus
-    // this includes the case where there are multiple matching modulus weights
+    // if any of the matching modulus weights pass the modulus, the account number is valid
+    // note, this is slightly conservative, and might return true for some invalid account numbers
+    // find the actuals spec quite confusing on these cases
     return matchingModulusWeights.some((weight) =>
       this.modulusCheck(weight, sortCode, accountNumber)
     );
