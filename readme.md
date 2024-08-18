@@ -20,13 +20,12 @@ npm install uk-modulus-check
 
 ## Usage
 ```
-const ModulusChecker = require('uk-modulus-check');
+import ModulusChecker from "uk-modulus-check";
 
-const modulusChecker = new ModulusChecker();
+const checker = new ModulusChecker();
 
-console.log(modulusChecker.validate('180002', '00000190')); // true
-
-console.log(modulusChecker.validate('938063', '15763217')); // false
+console.log(checker.validate('180002', '00000190')); // true
+console.log(checker.validate('938063', '15763217')); // false
 ```
 
 
