@@ -6,7 +6,7 @@ TypeScript class that validates UK bank account details using the modulus checki
 
 It only users vanilla typescript, and the 'fs' file-loading library. 
 
-From time to time, Vocalink updates the txt files here mapping sort-code ranges to validation weights. We currently use `v7-90` (valid from 17 August 2024). 
+Vocalink periodically updates the txt files here mapping sort-code ranges to validation weights. We currently use `v7-90` (valid from 17 August 2024). 
 
 ## Status
 
@@ -44,9 +44,9 @@ A mathematical algorithm compares the two values, and check if the two can be pa
 
 In general, I tried to minimise risk of returning `false` for a valid bank account.
 
-1. if an account has an unseen sort code (not covered by any range in src/data/valacdos), by default, any combination of sort-code and account number will be considered valid. This is altered by instantiating a check with `ModulusChecker(false)` and then default behaviour will be set to false
+1. if an account has an unseen sort code (not covered by any range in src/data/valacdos), any combination of sort-code and account number will be considered valid. This is because the Vocalink data doesn't seem to have 100% coverage. 
 
-2. I find the specification a bit confusing for some examples, specifically when 2 checks are run on the same account. I mark the account as valid if either of the two validations pass, for cases where multiple validations are provided for the same account. The specific test-cases in listest examples are 23, 27, 28. 
+2. I find the specification a bit confusing for some examples, specifically when 2 checks are run on the same account. I mark the account as valid if either of the two validations pass, for cases where multiple validations are provided for the same account. The specific test-cases are 23, 27, 28. 
 
 Both (1) and (2) might lead to a small % of 'false positives'. 
 

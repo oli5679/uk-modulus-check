@@ -1,6 +1,6 @@
 {
   "name": "uk-modulus-check",
-  "version": "1.0.10",
+  "version": "1.0.13",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -40,7 +40,6 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "fs": "^0.0.1-security",
-    "zod": "^3.23.8"
+    "fs": "^0.0.1-security"
   }
 }
