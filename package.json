@@ -1,8 +1,7 @@
 {
   "name": "uk-modulus-check",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "dist/index.js",
-  "type": "module",
   "types": "dist/index.d.ts",
   "license": "MIT",
   "homepage": "https://github.com/oli5679/uk-modulus-check",
@@ -41,7 +40,6 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "fs": "^0.0.1-security",
-    "zod": "^3.23.8"
+    "fs": "^0.0.1-security"
   }
 }

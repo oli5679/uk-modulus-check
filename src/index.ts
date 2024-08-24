@@ -10,10 +10,8 @@ import { fetchModulusWeights } from './dataLoaders';
 
 export default class ModulusChecker {
   private modulusWeighstArray: ModulusWeight[];
-  private unseenSortCodeBehaviour: boolean = true;
-  constructor(unseenSortCodeBehaviour: boolean = true) {
+  constructor() {
     this.modulusWeighstArray = fetchModulusWeights();
-    this.unseenSortCodeBehaviour = unseenSortCodeBehaviour;
   }
 
   modulusCheck = (
@@ -87,10 +85,11 @@ export default class ModulusChecker {
         parseInt(sortCode, 10) <= weight.end
     );
     // if there are no matching modulus weights, the sort code is not recognised
-    if (!matchingModulusWeights.length) return this.unseenSortCodeBehaviour;
+    // return true, since Vocalink data doesn't seem to have 100% coverage
+    if (!matchingModulusWeights.length) return true;
     // if any of the matching modulus weights pass the modulus, the account number is valid
     // note, this is slightly conservative, and might return true for some invalid account numbers
-    // find the actuals spec quite confusing on these cases
+    // find the actual spec. quite confusing on these cases
     return matchingModulusWeights.some((weight) =>
       this.modulusCheck(weight, sortCode, accountNumber)
     );
