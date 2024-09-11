@@ -6,14 +6,9 @@ import {
   applyOverwriteExceptionRules,
   applyPostTotalExceptionRules,
 } from './ExceptionRules';
-import { fetchModulusWeights } from './dataLoaders';
+import modulusWeighstArray from './data/valacdos.json';
 
 export default class ModulusChecker {
-  private modulusWeighstArray: ModulusWeight[];
-  constructor() {
-    this.modulusWeighstArray = fetchModulusWeights();
-  }
-
   modulusCheck = (
     modulusWeight: ModulusWeight,
     sortCode: string,
@@ -79,8 +74,10 @@ export default class ModulusChecker {
     // sort code and account number must be numeric
     if (!/^\d+$/.test(sortCode + accountNumber)) return false;
     // find the modulus weight that matches the sort code
-    const matchingModulusWeights = this.modulusWeighstArray.filter(
+    const matchingModulusWeights = modulusWeighstArray.filter(
       (weight) =>
+        weight.start &&
+        weight.end &&
         parseInt(sortCode, 10) >= weight.start &&
         parseInt(sortCode, 10) <= weight.end
     );
@@ -91,7 +88,7 @@ export default class ModulusChecker {
     // note, this is slightly conservative, and might return true for some invalid account numbers
     // find the actual spec. quite confusing on these cases
     return matchingModulusWeights.some((weight) =>
-      this.modulusCheck(weight, sortCode, accountNumber)
+      this.modulusCheck(weight as ModulusWeight, sortCode, accountNumber)
     );
   }
 }

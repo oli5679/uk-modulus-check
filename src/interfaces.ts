@@ -1,9 +1,9 @@
 import { CheckType } from './enums';
 
 export interface ModulusWeight {
-  start: number;
-  end: number;
-  check_type: CheckType;
+  start: number | null;
+  end: number | null;
+  check_type?: CheckType;
   exception: number | null;
   weights: number[];
 }
