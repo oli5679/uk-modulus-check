@@ -6,7 +6,7 @@ import {
   applyOverwriteExceptionRules,
   applyPostTotalExceptionRules,
 } from './ExceptionRules';
-import modulusWeighstArray from './data/valacdos.json';
+import modulusWeightsArray from './data/valacdos.json';
 
 export default class ModulusChecker {
   modulusCheck = (
@@ -74,7 +74,7 @@ export default class ModulusChecker {
     // sort code and account number must be numeric
     if (!/^\d+$/.test(sortCode + accountNumber)) return false;
     // find the modulus weight that matches the sort code
-    const matchingModulusWeights = modulusWeighstArray.filter(
+    const matchingModulusWeights = modulusWeightsArray.filter(
       (weight) =>
         weight.start &&
         weight.end &&
