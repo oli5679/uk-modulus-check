@@ -24,7 +24,7 @@ const applyExceptionAdjustments = (
   sortCode: string,
   modulusWeightException: number | null
 ): string => {
-  let adjustedSortCode: string = sortCode;
+  let adjustedSortCode = sortCode;
   if (modulusWeightException === 5 && substitutionMap[sortCode as keyof typeof substitutionMap]) {
     adjustedSortCode = substitutionMap[sortCode as keyof typeof substitutionMap];
   } else if (modulusWeightException === 8) {
