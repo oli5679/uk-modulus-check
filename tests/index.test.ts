@@ -13,7 +13,7 @@ describe('ModulusChecker', () => {
         const exampleWeights: ModulusWeight = {
             start: 499272,
             end: 499273,
-            check_type: 'DBLAL',
+            check_type: CheckType.DBLAL,
             exception: null,
             weights: [2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1],
         };
