@@ -11,6 +11,7 @@
     "url": "https://github.com/oli5679/uk-modulus-check.git"
   },
   "scripts": {
+    "process-data": "ts-node src/dataLoaders.ts",
     "build": "tsc && cp -r src/data dist/data",
     "test": "jest",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'"
