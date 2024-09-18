@@ -4,7 +4,7 @@
 
 TypeScript class that validates UK bank account details using the modulus checking algorithm. 
 
-It only users vanilla typescript, and the 'fs' file-loading library. 
+It only users vanilla typescript, and can be used on the frontend.
 
 Vocalink periodically updates the txt files here mapping sort-code ranges to validation weights. We currently use `v7-90` (valid from 17 August 2024). 
 
@@ -58,7 +58,7 @@ MIT
 
 Thanks to [uphold/uk-modulus-checking](https://github.com/uphold/uk-modulus-checking) for creating a good Javascript implementation. 
 
-It doesn't seem to have been updated since valacdos-v640 (12/10/2020), which motivates the creation of this package.
+It doesn't seem to have been updated since valacdos-v640 (12/10/2020), and I'm not sure it can be used directly in the frontend given 'fs' dependency, which motivates the creation of this package.
 
 
 
