@@ -1,65 +1,26 @@
-import ModulusChecker from '../src';
-import { ModulusWeight } from '../src/interfaces';
-import { CheckType } from '../src/enums';
+import {validateAccountDetails} from '../src';
 
 describe('ModulusChecker', () => {
-    let checker: ModulusChecker;
-
-    beforeEach(() => {
-        checker = new ModulusChecker();
-    });
-
-    describe('modulusCheck', () => {
-        const exampleWeights: ModulusWeight = {
-            start: 499272,
-            end: 499273,
-            check_type: CheckType.DBLAL,
-            exception: null,
-            weights: [2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1],
-        };
-
-        test('should pass example 1 from Vocalink spec', () => {
-            const result = checker.modulusCheck(exampleWeights, '499273', '12345678');
-            expect(result).toBe(true);
-        });
-
-        test('should fail example 1 from Vocalink spec with 1 increment', () => {
-            const result = checker.modulusCheck(exampleWeights, '499273', '1234569');
-            expect(result).toBe(false);
-        });
-
-        test('should pass example 2 from Vocalink spec', () => {
-            const exampleWeights: ModulusWeight = {
-                start: 0,
-                end: 1,
-                check_type: CheckType.MOD11,
-                exception: null,
-                weights: [0, 0, 0, 0, 0, 0, 7, 5, 8, 3, 4, 6, 2, 1],
-            };
-            const result = checker.modulusCheck(exampleWeights, '000000', '58177632');
-            expect(result).toBe(true);
-        });
-    });
-
+    
     describe('isValid', () => {
         // Custom tests
         test('should return false for a length 7 sort code', () => {
-            const isValid = checker.validate('1234567', '12345678');
+            const isValid = validateAccountDetails('1234567', '12345678');
             expect(isValid).toBe(false);
         });
 
         test('should return false for a length 11 account number', () => {
-            const isValid = checker.validate('000000', '12345678910');
+            const isValid = validateAccountDetails('000000', '12345678910');
             expect(isValid).toBe(false);
         });
 
         test('should return false for a non-numeric sort code', () => {
-            const isValid = checker.validate('12345a', '12345678');
+            const isValid = validateAccountDetails('12345a', '12345678');
             expect(isValid).toBe(false);
         });
 
         test('should return true for a sort code not on the spec range', () => {
-            const isValid = checker.validate('000000', '12345678');
+            const isValid = validateAccountDetails('000000', '12345678');
             expect(isValid).toBe(true);
         });
 
@@ -106,7 +67,7 @@ describe('ModulusChecker', () => {
 
         vocalinkSpecTests.forEach(({ sortCode, accountNumber, expectedResult }, index) => {
             test(`Vocalink spec test ${index + 1}`, () => {
-                const isValid = checker.validate(sortCode, accountNumber);
+                const isValid = validateAccountDetails(sortCode, accountNumber);
                 expect(isValid).toBe(expectedResult);
             });
         });
