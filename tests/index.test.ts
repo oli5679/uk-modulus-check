@@ -58,6 +58,11 @@ describe('ModulusChecker', () => {
             expect(isValid).toBe(false);
         });
 
+        test('should return true for a sort code not on the spec range', () => {
+            const isValid = checker.validate('000000', '12345678');
+            expect(isValid).toBe(true);
+        });
+
         // Vocalink spec tests
 
         // Comment indicates the test number from page 71, here
