@@ -24,12 +24,18 @@ See [here](https://www.npmjs.com/package/uk-modulus-check) for the NPM package.
 
 
 ```
-import ModulusChecker from "uk-modulus-check";
+import {validateAccountDetails} from "uk-modulus-check";
 
-const checker = new ModulusChecker();
 
-console.log(checker.validate('180002', '00000190')); // true
-console.log(checker.validate('938063', '15763217')); // false
+console.log(validateAccountDetails('180002', '00000190')); // true
+console.log(validateAccountDetails('938063', '15763217')); // false
+```
+
+```
+const {validateAccountDetails} = require("uk-modulus-check");
+
+console.log(validateAccountDetails('180002', '00000190')); // true
+console.log(validateAccountDetails('938063', '15763217')); // false
 ```
 
 ## Details
