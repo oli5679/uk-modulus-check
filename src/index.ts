@@ -8,7 +8,7 @@ import {
 } from './ExceptionRules';
 import modulusWeightsArray from './data/valacdos.json';
 
-export default class ModulusChecker {
+export class ModulusChecker {
   modulusCheck = (
     modulusWeight: ModulusWeight,
     sortCode: string,
