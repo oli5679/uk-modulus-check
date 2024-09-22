@@ -1,6 +1,6 @@
 {
   "name": "uk-modulus-check",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -14,8 +14,9 @@
     "process-data": "ts-node src/dataLoaders.ts",
     "build": "tsc && cp -r src/data dist/data",
     "test": "jest",
-    "format": "prettier --write 'src/**/*.{ts,js,json,md}'",
-    "publish": "npm run build && npm publish"
+    "publish": "npm publish",
+    "lint": "eslint 'src/**/*.{ts,js}' --max-warnings=0",
+    "fix": "eslint --fix 'src/**/*.{ts,js}'"  
   },
   "keywords": [
     "vocalink",
@@ -29,17 +30,20 @@
   "author": "Oliver Cairns",
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.11.0",
     "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
-    "eslint": "^9.9.0",
+    "eslint": "^9.11.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
     "jest": "^29.7.0",
     "prettier": "^3.3.3",
     "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.6.0"
   },
   "dependencies": {
     "fs": "^0.0.1-security"
