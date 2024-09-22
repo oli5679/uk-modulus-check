@@ -1,6 +1,13 @@
 import { readFileSync, writeFileSync } from 'fs';
 
-const processSubstitutionMap = () => {
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// For ES Modules, define __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const processSubstitutionMap = (): void => {
   const scsubtab = readFileSync(`${__dirname}/data/scsubtab.txt`, 'utf8')
     .split('\r\n')
     .map((line) => line.split(/\s+/))
@@ -12,7 +19,7 @@ const processSubstitutionMap = () => {
   );
 };
 
-const processModulusWeights = () => {
+const processModulusWeights = (): void => {
   const valacdos = readFileSync(`${__dirname}/data/valacdos-v7-90.txt`, 'utf8')
     .split('\r\n')
     .map((line) => {

@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "declaration": true,
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
+    "target": "ES2020",            // Update target if necessary
+    "module": "ES2020",            // Set module to ES2020 or newer
+    "moduleResolution": "Node",    // Ensure module resolution is set to Node
+    "esModuleInterop": true,       // Recommended for compatibility
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": "dist",              // Your output directory
+    "rootDir": "src",              // Your source directory
+    "resolveJsonModule": true,     // If you're importing JSON files
+    "allowSyntheticDefaultImports": true,
+    "lib": ["ES2020", "DOM"],      // Include the appropriate libraries
+    "types": ["node"],             // Include Node.js types
+    "typeRoots": ["./node_modules/@types"],
+    "declaration": true            // Generate .d.ts files
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
