@@ -12,10 +12,10 @@
     "resolveJsonModule": true,     // If you're importing JSON files
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2020", "DOM"],      // Include the appropriate libraries
-    "types": ["node"],             // Include Node.js types
+    "types": ["node", "jest"],             // Include Node.js types
     "typeRoots": ["./node_modules/@types"],
     "declaration": true            // Generate .d.ts files
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "scripts/dataLoader.js"]
 }

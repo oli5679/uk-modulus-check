@@ -11,12 +11,12 @@
     "url": "https://github.com/oli5679/uk-modulus-check.git"
   },
   "scripts": {
-    "process-data": "ts-node src/dataLoaders.ts",
-    "build": "tsc && cp -r src/data dist/data",
+    "process": "node scripts/dataLoader.js",
+    "build": "npm run process && tsc && cp -r src/data dist/data",
     "test": "jest",
-    "publish": "npm publish",
+    "publish": "npm run build && npm publish",
     "lint": "eslint 'src/**/*.{ts,js}' --max-warnings=0",
-    "fix": "eslint --fix 'src/**/*.{ts,js}'"  
+    "fix": "eslint --fix 'src/**/*.{ts,js}'"
   },
   "keywords": [
     "vocalink",
@@ -31,7 +31,7 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.11.0",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.13",
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
     "eslint": "^9.11.0",
@@ -44,8 +44,5 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.6.0"
-  },
-  "dependencies": {
-    "fs": "^0.0.1-security"
   }
 }
