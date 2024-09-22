@@ -1,20 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES2020",            // Update target if necessary
-    "module": "ES2020",            // Set module to ES2020 or newer
-    "moduleResolution": "Node",    // Ensure module resolution is set to Node
-    "esModuleInterop": true,       // Recommended for compatibility
+    "target": "ES2020",            
+    "module": "ES2020",            
+    "moduleResolution": "Node",    
+    "esModuleInterop": true,       
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "outDir": "dist",              // Your output directory
-    "rootDir": "src",              // Your source directory
-    "resolveJsonModule": true,     // If you're importing JSON files
+    "outDir": "dist",             
+    "rootDir": "src",             
+    "resolveJsonModule": true,    
     "allowSyntheticDefaultImports": true,
-    "lib": ["ES2020", "DOM"],      // Include the appropriate libraries
-    "types": ["node", "jest"],             // Include Node.js types
+    "lib": ["ES2020", "DOM"],     
+    "types": ["node", "jest"],    
     "typeRoots": ["./node_modules/@types"],
-    "declaration": true            // Generate .d.ts files
+    "declaration": true           
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", "scripts/dataLoader.js"]
