@@ -59,10 +59,10 @@ const modulusCalculation = (
   return adjustedTotal % checkTypeValue === 0;
 };
 
-export const validateAccountDetails = (
+export function validateAccountDetails(
   sortCode: string,
   accountNumber: string
-): boolean => {
+): boolean {
   // sort code must be 6 digits, account number must be between 6 and 10 digits
   if (
     accountNumber.length <= 6 ||
@@ -90,4 +90,4 @@ export const validateAccountDetails = (
   return matchingModulusWeights.some((weight) =>
     modulusCalculation(weight as ModulusWeight, sortCode, accountNumber)
   );
-};
+}
