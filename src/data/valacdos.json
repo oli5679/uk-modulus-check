@@ -902,6 +902,28 @@
     ]
   },
   {
+    "start": 44010,
+    "end": 44059,
+    "check_type": "MOD10",
+    "exception": null,
+    "weights": [
+      0,
+      0,
+      3,
+      7,
+      1,
+      3,
+      7,
+      1,
+      3,
+      7,
+      1,
+      3,
+      7,
+      1
+    ]
+  },
+  {
     "start": 50000,
     "end": 50020,
     "check_type": "MOD11",
@@ -5018,6 +5040,160 @@
   {
     "start": 230122,
     "end": 230122,
+    "check_type": "MOD11",
+    "exception": null,
+    "weights": [
+      8,
+      7,
+      1,
+      5,
+      8,
+      6,
+      1,
+      7,
+      6,
+      5,
+      5,
+      4,
+      9,
+      1
+    ]
+  },
+  {
+    "start": 230124,
+    "end": 230124,
+    "check_type": "MOD11",
+    "exception": null,
+    "weights": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      1
+    ]
+  },
+  {
+    "start": 230124,
+    "end": 230124,
+    "check_type": "DBLAL",
+    "exception": null,
+    "weights": [
+      2,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2,
+      1
+    ]
+  },
+  {
+    "start": 230145,
+    "end": 230145,
+    "check_type": "MOD11",
+    "exception": null,
+    "weights": [
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+    ]
+  },
+  {
+    "start": 230163,
+    "end": 230163,
+    "check_type": "MOD11",
+    "exception": null,
+    "weights": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      9,
+      7,
+      6,
+      4,
+      3,
+      2,
+      2,
+      1
+    ]
+  },
+  {
+    "start": 230169,
+    "end": 230169,
+    "check_type": "MOD10",
+    "exception": null,
+    "weights": [
+      0,
+      0,
+      1,
+      8,
+      2,
+      6,
+      3,
+      7,
+      9,
+      5,
+      8,
+      4,
+      2,
+      1
+    ]
+  },
+  {
+    "start": 230182,
+    "end": 230182,
+    "check_type": "MOD11",
+    "exception": null,
+    "weights": [
+      8,
+      7,
+      1,
+      5,
+      8,
+      6,
+      1,
+      7,
+      6,
+      5,
+      5,
+      4,
+      9,
+      1
+    ]
+  },
+  {
+    "start": 230221,
+    "end": 230221,
     "check_type": "MOD11",
     "exception": null,
     "weights": [

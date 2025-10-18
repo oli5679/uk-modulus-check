@@ -17,7 +17,7 @@ const processSubstitutionMap = () => {
 };
 
 const processModulusWeights = () => {
-  const valacdos = readFileSync(`${dataDir}/valacdos-v7-90.txt`, 'utf8')
+  const valacdos = readFileSync(`${dataDir}/valacdos-v8-50.txt`, 'utf8')
     .split('\r\n')
     .map((line) => {
       const data = line.split(/\s+/);
