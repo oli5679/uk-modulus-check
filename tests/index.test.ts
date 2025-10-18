@@ -26,8 +26,8 @@ describe('ModulusChecker', () => {
 
         // Vocalink spec tests
 
-        // Comment indicates the test number from page 71, here
-        // https://www.vocalink.com/media/a2febq5m/validating-account-numbers-uk-modulus-checking-v7-90.pdf
+        // Comment indicates the test number from Chapter 3, here
+        // https://www.vocalink.com/media/vu1advew/validating-account-numbers-uk-modulus-checking-v850.pdf
         // not passing for 23, 27, 28, which are all expected failures according to the spec.
         
         const vocalinkSpecTests = [

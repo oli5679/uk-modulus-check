@@ -6,7 +6,7 @@ TypeScript class that validates UK bank account details using the modulus checki
 
 It only users vanilla typescript, and can be used on the frontend.
 
-Vocalink periodically updates the txt files here mapping sort-code ranges to validation weights. We currently use `v7-90` (valid from 17 August 2024). 
+Vocalink periodically updates the txt files here mapping sort-code ranges to validation weights. We currently use `v8-50` (valid from 23 June 2025). 
 
 ## Status
 
@@ -40,7 +40,7 @@ console.log(validateAccountDetails('938063', '15763217')); // false
 
 ## Details
 
-[This](https://www.vocalink.com/media/a2febq5m/validating-account-numbers-uk-modulus-checking-v7-90.pdf) specification details logic to differentiate valid vs. invalid pairs of sort-code and account number. 
+[This](https://www.vocalink.com/media/e3dlebpm/validating-account-numbers-uk-modulus-checking-v8-50.pdf) specification details logic to differentiate valid vs. invalid pairs of sort-code and account number. 
 
 A mathematical algorithm compares the two values, and check if the two can be paired together legitimately.
 
