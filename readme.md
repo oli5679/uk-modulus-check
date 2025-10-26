@@ -52,9 +52,7 @@ In general, I tried to minimise risk of returning `false` for a valid bank accou
 
 1. if an account has an unseen sort code (not covered by any range in src/data/valacdos), any combination of sort-code and account number will be considered valid. This is because the Vocalink data doesn't seem to have 100% coverage. 
 
-2. I find the specification a bit confusing for some examples, specifically when 2 checks are run on the same account. I mark the account as valid if either of the two validations pass, for cases where multiple validations are provided for the same account. The specific test-cases are 23, 27, 28. 
-
-Both (1) and (2) might lead to a small % of 'false positives'. 
+This might lead to a small % of 'false positives'. 
 
 ## License
 
