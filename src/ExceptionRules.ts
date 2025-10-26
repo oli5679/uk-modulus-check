@@ -107,11 +107,12 @@ export const applyOverwriteExceptionRules = (
   }
   if (modulusWeight.exception === 14) {
     if (!['0', '1', '9'].includes(h)) {
-      return { modifiedAccountDetails: accountDetails, overwriteResult: false };
+      return { modifiedAccountDetails: accountDetails, overwriteResult: null };
     }
+    // For exception 14, replace position 6 with 7
     return {
       modifiedAccountDetails:
-        accountDetails.slice(0, 6) + '0' + accountDetails.slice(7),
+        accountDetails.slice(0, 6) + '7' + accountDetails.slice(7),
       overwriteResult: null,
     };
   }

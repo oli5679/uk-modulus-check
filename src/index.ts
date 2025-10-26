@@ -30,33 +30,48 @@ const modulusCalculation = (
 
   if (overwriteResult !== null) return overwriteResult;
 
-  // multiply each digit of the account details by the corresponding weight value
-  const multiplicationResultArray = modifiedAccountDetails
-    .split('')
-    .map((digit, index) => parseInt(digit, 10) * weightValues[index]);
-
-  // calculate total based on the check type
-  let total: number;
-  if (modulusWeight.check_type == CheckType.DBLAL) {
-    total = multiplicationResultArray
-      .map((num) => num.toString())
-      .join('')
+  // Helper function to perform the modulus check
+  const performCheck = (detailsToCheck: string, weights: number[]): boolean => {
+    // multiply each digit of the account details by the corresponding weight value
+    const multiplicationResultArray = detailsToCheck
       .split('')
-      .reduce((acc, digit) => acc + parseInt(digit, 10), 0);
-  } else {
-    total = multiplicationResultArray.reduce((acc, curr) => acc + curr, 0);
+      .map((digit, index) => parseInt(digit, 10) * weights[index]);
+
+    // calculate total based on the check type
+    let total: number;
+    if (modulusWeight.check_type == CheckType.DBLAL) {
+      total = multiplicationResultArray
+        .map((num) => num.toString())
+        .join('')
+        .split('')
+        .reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+    } else {
+      total = multiplicationResultArray.reduce((acc, curr) => acc + curr, 0);
+    }
+
+    // apply post-total exception rules
+    const { adjustedTotal, overwriteResult2 } = applyPostTotalExceptionRules(
+      modulusWeight.exception,
+      total,
+      detailsToCheck
+    );
+    if (overwriteResult2 !== null) return overwriteResult2;
+
+    const checkTypeValue = modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
+    return adjustedTotal % checkTypeValue === 0;
+  };
+
+  // First stage: try with modified account details (or original if no modification)
+  if (performCheck(modifiedAccountDetails, weightValues)) {
+    return true;
   }
 
-  // apply post-total exception rules
-  const { adjustedTotal, overwriteResult2 } = applyPostTotalExceptionRules(
-    modulusWeight.exception,
-    total,
-    accountDetails
-  );
-  if (overwriteResult2 !== null) return overwriteResult2;
+  // Exception 14: two-stage check - if first check fails, try with original account details
+  if (modulusWeight.exception === 14 && modifiedAccountDetails !== accountDetails) {
+    return performCheck(accountDetails, weightValues);
+  }
 
-  const checkTypeValue = modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
-  return adjustedTotal % checkTypeValue === 0;
+  return false;
 };
 
 export function validateAccountDetails(

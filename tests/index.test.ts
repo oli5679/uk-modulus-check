@@ -62,8 +62,8 @@ describe('ModulusChecker', () => {
             { sortCode: '074456', accountNumber: '12345112', expectedResult: true }, // 31
             { sortCode: '070116', accountNumber: '34012583', expectedResult: true }, // 32
             { sortCode: '074456', accountNumber: '11104102', expectedResult: true }, // 33
-            { sortCode: '180002', accountNumber: '00000190', expectedResult: true }, // 34
-            { sortCode: '180002', accountNumber: '09747109', expectedResult: true }, // Exception 14 rule bug fix test
+            { sortCode: '180002', accountNumber: '00000190', expectedResult: true }, // 34 - Exception 14
+            { sortCode: '180002', accountNumber: '09747109', expectedResult: true }, // Exception 14 bug fix
         ];
 
         vocalinkSpecTests.forEach(({ sortCode, accountNumber, expectedResult }, index) => {
