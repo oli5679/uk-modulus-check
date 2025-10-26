@@ -135,10 +135,12 @@ export const applyPostTotalExceptionRules = (
     }
   }
   if (exception == 5) {
-    const g = parseInt(accountDetails[AccountDetailIndex.G], 10);
-    const remainder = total % 11;
-    overwriteResult2 =
-      (remainder === 0 && g === 0) || (remainder !== 1 && 11 - remainder === g);
+    const a = parseInt(accountDetails[AccountDetailIndex.A], 10);
+    if (a === 1) {
+      overwriteResult2 = false;
+    } else {
+      overwriteResult2 = true;
+    }
   }
   return { adjustedTotal, overwriteResult2 };
 };

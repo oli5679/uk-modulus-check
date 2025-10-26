@@ -105,7 +105,13 @@ export function validateAccountDetails(
   // if no matching weights, assume the sort code is valid by default
   if (!matchingModulusWeights.length) return true;
 
-  // check if any matching weight passes the modulus check
+  const hasException6 = matchingModulusWeights.some((w) => w.exception === 6);
+  if (hasException6) {
+    return matchingModulusWeights.every((weight) =>
+      modulusCalculation(weight as ModulusWeight, sortCode, accountNumber)
+    );
+  }
+
   return matchingModulusWeights.some((weight) =>
     modulusCalculation(weight as ModulusWeight, sortCode, accountNumber)
   );

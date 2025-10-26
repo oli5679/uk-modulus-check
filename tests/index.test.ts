@@ -53,13 +53,12 @@ describe('ModulusChecker', () => {
             { sortCode: '309070', accountNumber: '12345668', expectedResult: true }, // 20
             { sortCode: '309070', accountNumber: '12345677', expectedResult: true }, // 21
             { sortCode: '309070', accountNumber: '99345694', expectedResult: true }, // 22          
-            // TODO: Tests 23, 27, 28 were excluded - they fail with exception 5 and 6 rules
-            // { sortCode: '938063', accountNumber: '15764273', expectedResult: false }, // 23
+            { sortCode: '938063', accountNumber: '15764273', expectedResult: false }, // 23
             { sortCode: '938063', accountNumber: '15764264', expectedResult: false }, // 24
             { sortCode: '938063', accountNumber: '15763217', expectedResult: false }, // 25
             { sortCode: '118765', accountNumber: '64371388', expectedResult: false }, // 26
-            // { sortCode: '203099', accountNumber: '66831036', expectedResult: false }, // 27
-            // { sortCode: '203099', accountNumber: '58716970', expectedResult: false }, // 28
+            { sortCode: '203099', accountNumber: '66831036', expectedResult: false }, // 27
+            { sortCode: '203099', accountNumber: '58716970', expectedResult: false }, // 28
             { sortCode: '089999', accountNumber: '66374959', expectedResult: false }, // 29
             { sortCode: '107999', accountNumber: '88837493', expectedResult: false }, // 30
             { sortCode: '074456', accountNumber: '12345112', expectedResult: true },  // 31
