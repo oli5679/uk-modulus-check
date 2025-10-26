@@ -103,4 +103,22 @@ describe('ModulusChecker', () => {
             expect(isValid).toBe(true);
         });
     });
+
+    describe('Coventry Building Society 9-digit accounts', () => {
+        test('Sort code 090128 with 9-digit account', () => {
+            expect(typeof validateAccountDetails('090128', '123456789')).toBe('boolean');
+        });
+
+        test('Sort code 720000 with 9-digit account', () => {
+            expect(typeof validateAccountDetails('720000', '987654321')).toBe('boolean');
+        });
+
+        test('Sort code 890000 with 9-digit account', () => {
+            expect(typeof validateAccountDetails('890000', '111222333')).toBe('boolean');
+        });
+
+        test('Sort code 165710 with 9-digit account', () => {
+            expect(typeof validateAccountDetails('165710', '444555666')).toBe('boolean');
+        });
+    });
 });
