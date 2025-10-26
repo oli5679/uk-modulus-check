@@ -67,8 +67,7 @@ const modulusCalculation = (
   }
 
   // Exception 14: two-stage check - if first check fails, try with position 6 modified to 7
-  // This is only for sort code 180002 (Coutts)
-  if (modulusWeight.exception === 14 && parseInt(sortCode, 10) === 180002) {
+  if (modulusWeight.exception === 14) {
     const fallbackDetails = accountDetails.slice(0, 6) + '7' + accountDetails.slice(7);
     if (performCheck(fallbackDetails, weightValues)) {
       return true;
