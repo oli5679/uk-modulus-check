@@ -26,7 +26,7 @@ const modulusCalculation = (
     accountDetails
   );
   const { modifiedAccountDetails, overwriteResult } =
-    applyOverwriteExceptionRules(modulusWeight, accountDetails);
+    applyOverwriteExceptionRules(modulusWeight, accountDetails, sortCode);
 
   if (overwriteResult !== null) return overwriteResult;
 
@@ -66,9 +66,13 @@ const modulusCalculation = (
     return true;
   }
 
-  // Exception 14: two-stage check - if first check fails, try with original account details
-  if (modulusWeight.exception === 14 && modifiedAccountDetails !== accountDetails) {
-    return performCheck(accountDetails, weightValues);
+  // Exception 14: two-stage check - if first check fails, try with position 6 modified to 7
+  // This is only for sort code 180002 (Coutts)
+  if (modulusWeight.exception === 14 && parseInt(sortCode, 10) === 180002) {
+    const fallbackDetails = accountDetails.slice(0, 6) + '7' + accountDetails.slice(7);
+    if (performCheck(fallbackDetails, weightValues)) {
+      return true;
+    }
   }
 
   return false;

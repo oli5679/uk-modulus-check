@@ -88,7 +88,8 @@ export const applyWeightValueExceptionRules = (
 
 export const applyOverwriteExceptionRules = (
   modulusWeight: ModulusWeight,
-  accountDetails: string
+  accountDetails: string,
+  sortCode?: string
 ): { modifiedAccountDetails: string; overwriteResult: boolean | null } => {
   const {
     [AccountDetailIndex.A]: a,
@@ -109,12 +110,8 @@ export const applyOverwriteExceptionRules = (
     if (!['0', '1', '9'].includes(h)) {
       return { modifiedAccountDetails: accountDetails, overwriteResult: null };
     }
-    // For exception 14, replace position 6 with 7
-    return {
-      modifiedAccountDetails:
-        accountDetails.slice(0, 6) + '7' + accountDetails.slice(7),
-      overwriteResult: null,
-    };
+    // Exception 14: Don't modify here - let the main logic handle two-stage check if needed
+    return { modifiedAccountDetails: accountDetails, overwriteResult: null };
   }
   return { modifiedAccountDetails: accountDetails, overwriteResult: null };
 };
