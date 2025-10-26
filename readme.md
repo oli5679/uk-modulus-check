@@ -46,13 +46,9 @@ A mathematical algorithm compares the two values, and check if the two can be pa
 
 [This](https://www.vocalink.com/tools/modulus-checking/) page details any changes to the specification.
 
-## Technicalities
+## sort codes not in spec
 
-In general, I tried to minimise risk of returning `false` for a valid bank account.
-
-1. if an account has an unseen sort code (not covered by any range in src/data/valacdos), any combination of sort-code and account number will be considered valid. This is because the Vocalink data doesn't seem to have 100% coverage. 
-
-This might lead to a small % of 'false positives'. 
+If an account has an unseen sort code (not covered by any range in src/data/valacdos), any combination of sort-code and account number will be considered valid. This is because the Vocalink data doesn't seem to have 100% coverage. This might lead to a small % of 'false positives'. 
 
 ## License
 
