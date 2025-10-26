@@ -2,6 +2,38 @@ import { ModulusWeight } from './interfaces';
 import { AccountDetailIndex } from './enums';
 import substitutionMap from './data/scsubtab.json';
 
+// Helper function to identify bank type from sort code
+const getBankType = (sortCode: string): 'santander' | 'coventry' | 'other' => {
+  const code = parseInt(sortCode, 10);
+
+  // Santander ranges (as documented by Vocalink)
+  const santanderRanges = [{ start: 871427, end: 872427 }];
+
+  // Coventry Building Society ranges
+  const coventryRanges = [
+    { start: 90000, end: 91900 },
+    { start: 720000, end: 729999 },
+    { start: 890000, end: 892999 },
+    { code: 165710 },
+  ];
+
+  for (const range of santanderRanges) {
+    if (code >= range.start && code <= range.end) {
+      return 'santander';
+    }
+  }
+
+  for (const range of coventryRanges) {
+    if ('code' in range) {
+      if (code === range.code) return 'coventry';
+    } else {
+      if (code >= range.start && code <= range.end) return 'coventry';
+    }
+  }
+
+  return 'other';
+};
+
 const applyLengthAdjustments = (
   sortCode: string,
   accountNumber: string
@@ -12,8 +44,19 @@ const applyLengthAdjustments = (
   } else if (accountNumber.length === 7) {
     adjustedAccountNumber = '0' + accountNumber;
   } else if (accountNumber.length === 9) {
-    adjustedSortCode = sortCode.slice(0, -1) + accountNumber[0];
-    adjustedAccountNumber = accountNumber.slice(1);
+    const bankType = getBankType(sortCode);
+    if (bankType === 'santander') {
+      // Vocalink documented logic for Santander: move first digit to sort code
+      adjustedSortCode = sortCode.slice(0, -1) + accountNumber[0];
+      adjustedAccountNumber = accountNumber.slice(1);
+    } else if (bankType === 'coventry') {
+      // Coventry Building Society: simply remove the first digit
+      adjustedAccountNumber = accountNumber.slice(1);
+    } else {
+      // For other banks with 9-digit accounts, use Vocalink logic as fallback
+      adjustedSortCode = sortCode.slice(0, -1) + accountNumber[0];
+      adjustedAccountNumber = accountNumber.slice(1);
+    }
   } else if (accountNumber.length === 10) {
     adjustedAccountNumber = accountNumber.slice(0, 8);
   }
