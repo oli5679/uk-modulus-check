@@ -63,6 +63,7 @@ describe('ModulusChecker', () => {
             { sortCode: '070116', accountNumber: '34012583', expectedResult: true }, // 32
             { sortCode: '074456', accountNumber: '11104102', expectedResult: true }, // 33
             { sortCode: '180002', accountNumber: '00000190', expectedResult: true }, // 34
+            { sortCode: '180002', accountNumber: '09747109', expectedResult: true }, // Exception 14 rule bug fix test
         ];
 
         vocalinkSpecTests.forEach(({ sortCode, accountNumber, expectedResult }, index) => {
@@ -70,6 +71,28 @@ describe('ModulusChecker', () => {
                 const isValid = validateAccountDetails(sortCode, accountNumber);
                 expect(isValid).toBe(expectedResult);
             });
+        });
+    });
+
+    describe('Coutts sort code test', () => {
+        // adding a test for the Coutts sort code since earlier had a bug with this range
+        test('Sort code 180002 with account number 09747109 should be valid', () => {
+            const isValid = validateAccountDetails('180002', '09747109');
+            expect(isValid).toBe(true);
+        });
+
+        test('Sort code 180002 with account number 12345678 should be invalid (last digit must be 0, 1, or 9)', () => {
+            const isValid = validateAccountDetails('180002', '12345678');
+            expect(isValid).toBe(false);
+        });
+
+        test('Exception 14 correctly replaces position 6 without dropping the last digit', () => {
+            // For 180002 09747109:
+            // Account details: 18000209747109
+            // After exception 14 modification: 18000209747109 (replace pos 6 with 0, which is already 0)
+            // MOD11 calculation: 165 % 11 = 0 ✓
+            const isValid = validateAccountDetails('180002', '09747109');
+            expect(isValid).toBe(true);
         });
     });
 });

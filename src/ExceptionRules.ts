@@ -111,7 +111,7 @@ export const applyOverwriteExceptionRules = (
     }
     return {
       modifiedAccountDetails:
-        accountDetails.slice(0, 6) + '0' + accountDetails.slice(6, -1),
+        accountDetails.slice(0, 6) + '0' + accountDetails.slice(7),
       overwriteResult: null,
     };
   }
