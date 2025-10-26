@@ -57,7 +57,8 @@ const modulusCalculation = (
     );
     if (overwriteResult2 !== null) return overwriteResult2;
 
-    const checkTypeValue = modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
+    const checkTypeValue =
+      modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
     return adjustedTotal % checkTypeValue === 0;
   };
 
@@ -68,7 +69,8 @@ const modulusCalculation = (
 
   // Exception 14: two-stage check - if first check fails, try with position 6 modified to 7
   if (modulusWeight.exception === 14) {
-    const fallbackDetails = accountDetails.slice(0, 6) + '7' + accountDetails.slice(7);
+    const fallbackDetails =
+      accountDetails.slice(0, 6) + '7' + accountDetails.slice(7);
     if (performCheck(fallbackDetails, weightValues)) {
       return true;
     }

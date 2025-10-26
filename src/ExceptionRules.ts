@@ -89,7 +89,7 @@ export const applyWeightValueExceptionRules = (
 export const applyOverwriteExceptionRules = (
   modulusWeight: ModulusWeight,
   accountDetails: string,
-  sortCode?: string
+  _sortCode?: string
 ): { modifiedAccountDetails: string; overwriteResult: boolean | null } => {
   const {
     [AccountDetailIndex.A]: a,
