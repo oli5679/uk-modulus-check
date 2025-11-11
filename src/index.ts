@@ -60,8 +60,7 @@ const modulusCalculation = (
     if (postTotalOverwriteResult !== null) return postTotalOverwriteResult;
 
     // Perform final modulus check
-    const modulusValue =
-      modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
+    const modulusValue = modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
     return adjustedTotal % modulusValue === 0;
   };
 
@@ -83,10 +82,7 @@ const modulusCalculation = (
 };
 
 // Validate input format
-const validateInput = (
-  sortCode: string,
-  accountNumber: string
-): boolean => {
+const validateInput = (sortCode: string, accountNumber: string): boolean => {
   // sort code must be 6 digits, account number must be between 6 and 10 digits
   if (
     accountNumber.length <= 6 ||
