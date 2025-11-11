@@ -28,8 +28,7 @@ describe('ModulusChecker', () => {
 
         // Comment indicates the test number from Chapter 3, here
         // https://www.vocalink.com/media/vu1advew/validating-account-numbers-uk-modulus-checking-v850.pdf
-        // not passing for 23, 27, 28, which are all expected failures according to the spec.
-        
+        // All tests now passing (previously tests 23, 27, 28 were failing but have been fixed)
         const vocalinkSpecTests = [
             { sortCode: '089999', accountNumber: '66374958', expectedResult: true }, // 1
             { sortCode: '107999', accountNumber: '88837491', expectedResult: true }, // 2
@@ -73,13 +72,6 @@ describe('ModulusChecker', () => {
               expect(isValid).toBe(expectedResult);
             });
           });
-
-        vocalinkSpecTests.forEach(({ sortCode, accountNumber, expectedResult }, index) => {
-            test(`Vocalink spec test ${index + 1}`, () => {
-                const isValid = validateAccountDetails(sortCode, accountNumber);
-                expect(isValid).toBe(expectedResult);
-            });
-        });
     });
 
     describe('Coutts sort code test', () => {
