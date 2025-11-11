@@ -23,9 +23,9 @@ describe('ModulusChecker', () => {
             const isValid = validateAccountDetails('000000', '12345678');
             expect(isValid).toBe(true);
         });
+    });
 
-        // Vocalink spec tests
-
+    describe('Vocalink spec tests', () => {
         // Comment indicates the test number from Chapter 3, here
         // https://www.vocalink.com/media/vu1advew/validating-account-numbers-uk-modulus-checking-v850.pdf
         const vocalinkSpecTests = [
@@ -63,14 +63,14 @@ describe('ModulusChecker', () => {
             { sortCode: '070116', accountNumber: '34012583', expectedResult: true },  // 32
             { sortCode: '074456', accountNumber: '11104102', expectedResult: true },  // 33
             { sortCode: '180002', accountNumber: '00000190', expectedResult: true },  // 34
-          ];
-          
-          vocalinkSpecTests.forEach(({ sortCode, accountNumber, expectedResult }, index) => {
+        ];
+
+        vocalinkSpecTests.forEach(({ sortCode, accountNumber, expectedResult }, index) => {
             test(`Vocalink spec test ${index + 1}`, () => {
-              const isValid = validateAccountDetails(sortCode, accountNumber);
-              expect(isValid).toBe(expectedResult);
+                const isValid = validateAccountDetails(sortCode, accountNumber);
+                expect(isValid).toBe(expectedResult);
             });
-          });
+        });
     });
 
     describe('Coutts sort code test', () => {
