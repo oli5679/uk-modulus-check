@@ -4,7 +4,7 @@
 
 TypeScript class that validates UK bank account details using the modulus checking algorithm. 
 
-It only users vanilla typescript, and can be used on the frontend.
+It only uses vanilla typescript, and can be used on the frontend.
 
 Vocalink periodically updates the txt files here mapping sort-code ranges to validation weights. We currently use `v8-50` (valid from 23 June 2025). 
 

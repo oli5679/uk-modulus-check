@@ -1,6 +1,11 @@
 import { ModulusWeight } from './interfaces';
-import { AccountDetailIndex } from './enums';
+import { AccountDetailIndex, CheckType } from './enums';
 import substitutionMap from './data/scsubtab.json';
+
+// Constants for modulus checking
+const MOD11_VALUE = 11;
+const MOD10_VALUE = 10;
+const EXCEPTION_1_ADJUSTMENT = 27;
 
 const applyLengthAdjustments = (
   sortCode: string,
@@ -75,11 +80,11 @@ export const applyWeightValueExceptionRules = (
     }
   }
   if (modulusWeight.exception === 2) {
-    const a = accountDetails[AccountDetailIndex.A];
-    const g = accountDetails[AccountDetailIndex.G];
-    if (a !== '0' && g !== '9') {
+    const digitA = accountDetails[AccountDetailIndex.A];
+    const digitG = accountDetails[AccountDetailIndex.G];
+    if (digitA !== '0' && digitG !== '9') {
       modifiedWeightings = [0, 0, 1, 2, 5, 3, 6, 4, 8, 7, 10, 9, 3, 1];
-    } else if (a !== '0' && g === '9') {
+    } else if (digitA !== '0' && digitG === '9') {
       modifiedWeightings = [0, 0, 0, 0, 0, 0, 0, 0, 8, 7, 10, 9, 3, 1];
     }
   }
@@ -92,22 +97,22 @@ export const applyOverwriteExceptionRules = (
   _sortCode?: string
 ): { modifiedAccountDetails: string; overwriteResult: boolean | null } => {
   const {
-    [AccountDetailIndex.A]: a,
-    [AccountDetailIndex.G]: g,
-    [AccountDetailIndex.H]: h,
+    [AccountDetailIndex.A]: digitA,
+    [AccountDetailIndex.G]: digitG,
+    [AccountDetailIndex.H]: digitH,
   } = accountDetails;
-  if (modulusWeight.exception === 3 && ['1', '9'].includes(a))
+  if (modulusWeight.exception === 3 && ['1', '9'].includes(digitA))
     return { modifiedAccountDetails: accountDetails, overwriteResult: true };
   if (
     modulusWeight.exception === 6 &&
-    parseInt(a, 10) >= 4 &&
-    parseInt(a, 10) <= 10 &&
-    g === h
+    parseInt(digitA, 10) >= 4 &&
+    parseInt(digitA, 10) <= 10 &&
+    digitG === digitH
   ) {
     return { modifiedAccountDetails: accountDetails, overwriteResult: true };
   }
   if (modulusWeight.exception === 14) {
-    if (!['0', '1', '9'].includes(h)) {
+    if (!['0', '1', '9'].includes(digitH)) {
       return { modifiedAccountDetails: accountDetails, overwriteResult: null };
     }
     // Exception 14: Don't modify here - let the main logic handle two-stage check if needed
@@ -116,31 +121,81 @@ export const applyOverwriteExceptionRules = (
   return { modifiedAccountDetails: accountDetails, overwriteResult: null };
 };
 
+const handleException5 = (
+  checkType: CheckType | undefined,
+  total: number,
+  digitG: number
+): boolean | null => {
+  const modulusValue =
+    checkType === CheckType.MOD11 ? MOD11_VALUE : MOD10_VALUE;
+  const remainder = total % modulusValue;
+  const REMAINDER_ZERO = 0;
+  const REMAINDER_ONE = 1;
+
+  // Case 1: remainder === 0 && g === 0 (always valid)
+  if (remainder === REMAINDER_ZERO && digitG === REMAINDER_ZERO) {
+    return true;
+  }
+
+  // Case 2: MOD11 - when 11 - remainder === g, return null to let normal check proceed
+  // This prevents false positives where MOD11 would pass but DBLAL fails
+  if (
+    checkType === CheckType.MOD11 &&
+    remainder !== REMAINDER_ZERO &&
+    remainder !== REMAINDER_ONE &&
+    modulusValue - remainder === digitG
+  ) {
+    return null; // Let normal check proceed (will fail, making overall fail)
+  }
+
+  // Case 3: DBLAL remainder === 1 (special case when MOD11 passes)
+  if (checkType === CheckType.DBLAL && remainder === REMAINDER_ONE) {
+    return true;
+  }
+
+  // Case 4: DBLAL - when 10 - remainder === g
+  if (
+    checkType === CheckType.DBLAL &&
+    remainder !== REMAINDER_ZERO &&
+    remainder !== REMAINDER_ONE &&
+    modulusValue - remainder === digitG
+  ) {
+    return true;
+  }
+
+  // Default: return null to let normal check proceed
+  return null;
+};
+
 export const applyPostTotalExceptionRules = (
   exception: number | null,
   total: number,
-  accountDetails: string
-): { adjustedTotal: number; overwriteResult2: boolean | null } => {
+  accountDetails: string,
+  checkType?: CheckType
+): { adjustedTotal: number; postTotalOverwriteResult: boolean | null } => {
   let adjustedTotal = total;
-  let overwriteResult2 = null;
-  if (exception == 1) {
-    adjustedTotal += 27;
+  let postTotalOverwriteResult: boolean | null = null;
+
+  // Exception 1: Add 27 to total
+  if (exception === 1) {
+    adjustedTotal += EXCEPTION_1_ADJUSTMENT;
   }
-  if (exception == 4) {
+
+  // Exception 4: Check if remainder matches last two digits
+  if (exception === 4) {
     if (
-      total % 11 ===
+      total % MOD11_VALUE ===
       parseInt(accountDetails.substring(accountDetails.length - 2), 10)
     ) {
-      overwriteResult2 = true;
+      postTotalOverwriteResult = true;
     }
   }
-  if (exception == 5) {
-    const a = parseInt(accountDetails[AccountDetailIndex.A], 10);
-    if (a === 1) {
-      overwriteResult2 = false;
-    } else {
-      overwriteResult2 = true;
-    }
+
+  // Exception 5: Special validation logic
+  if (exception === 5) {
+    const digitG = parseInt(accountDetails[AccountDetailIndex.G], 10);
+    postTotalOverwriteResult = handleException5(checkType, total, digitG);
   }
-  return { adjustedTotal, overwriteResult2 };
+
+  return { adjustedTotal, postTotalOverwriteResult };
 };

@@ -50,16 +50,18 @@ const modulusCalculation = (
     }
 
     // apply post-total exception rules
-    const { adjustedTotal, overwriteResult2 } = applyPostTotalExceptionRules(
-      modulusWeight.exception,
-      total,
-      detailsToCheck
-    );
-    if (overwriteResult2 !== null) return overwriteResult2;
+    const { adjustedTotal, postTotalOverwriteResult } =
+      applyPostTotalExceptionRules(
+        modulusWeight.exception,
+        total,
+        detailsToCheck,
+        modulusWeight.check_type
+      );
+    if (postTotalOverwriteResult !== null) return postTotalOverwriteResult;
 
-    const checkTypeValue =
-      modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
-    return adjustedTotal % checkTypeValue === 0;
+    // Perform final modulus check
+    const modulusValue = modulusWeight.check_type === CheckType.MOD11 ? 11 : 10;
+    return adjustedTotal % modulusValue === 0;
   };
 
   // First stage: try with modified account details (or original if no modification)
@@ -79,41 +81,61 @@ const modulusCalculation = (
   return false;
 };
 
-export function validateAccountDetails(
-  sortCode: string,
-  accountNumber: string
-): boolean {
+// Validate input format
+const validateInput = (sortCode: string, accountNumber: string): boolean => {
   // sort code must be 6 digits, account number must be between 6 and 10 digits
   if (
     accountNumber.length <= 6 ||
     accountNumber.length >= 10 ||
     sortCode.length !== 6
-  )
+  ) {
     return false;
+  }
 
   // sort code and account number must be numeric
-  if (!/^\d+$/.test(sortCode + accountNumber)) return false;
+  return /^\d+$/.test(sortCode + accountNumber);
+};
 
-  // find the modulus weight that matches the sort code
-  const matchingModulusWeights = modulusWeightsArray.filter(
+// Find matching modulus weights for a sort code
+const findMatchingWeights = (sortCode: string): ModulusWeight[] => {
+  const sortCodeNum = parseInt(sortCode, 10);
+  return modulusWeightsArray.filter(
     (weight) =>
       weight.start &&
       weight.end &&
-      parseInt(sortCode, 10) >= weight.start &&
-      parseInt(sortCode, 10) <= weight.end
-  );
+      sortCodeNum >= weight.start &&
+      sortCodeNum <= weight.end
+  ) as ModulusWeight[];
+};
 
-  // if no matching weights, assume the sort code is valid by default
-  if (!matchingModulusWeights.length) return true;
+export function validateAccountDetails(
+  sortCode: string,
+  accountNumber: string
+): boolean {
+  // Validate input format
+  if (!validateInput(sortCode, accountNumber)) {
+    return false;
+  }
 
+  // Find matching modulus weights for this sort code
+  const matchingModulusWeights = findMatchingWeights(sortCode);
+
+  // If no matching weights, assume the sort code is valid by default
+  if (!matchingModulusWeights.length) {
+    return true;
+  }
+
+  // Exception 6: requires ALL checks to pass (both MOD11 and DBLAL)
   const hasException6 = matchingModulusWeights.some((w) => w.exception === 6);
   if (hasException6) {
     return matchingModulusWeights.every((weight) =>
-      modulusCalculation(weight as ModulusWeight, sortCode, accountNumber)
+      modulusCalculation(weight, sortCode, accountNumber)
     );
   }
 
+  // Default: requires AT LEAST ONE check to pass (MOD11 OR DBLAL)
+  // This applies to Exception 5 and other exceptions
   return matchingModulusWeights.some((weight) =>
-    modulusCalculation(weight as ModulusWeight, sortCode, accountNumber)
+    modulusCalculation(weight, sortCode, accountNumber)
   );
 }

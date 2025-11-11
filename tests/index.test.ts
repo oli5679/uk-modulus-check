@@ -23,13 +23,11 @@ describe('ModulusChecker', () => {
             const isValid = validateAccountDetails('000000', '12345678');
             expect(isValid).toBe(true);
         });
+    });
 
-        // Vocalink spec tests
-
+    describe('Vocalink spec tests', () => {
         // Comment indicates the test number from Chapter 3, here
         // https://www.vocalink.com/media/vu1advew/validating-account-numbers-uk-modulus-checking-v850.pdf
-        // not passing for 23, 27, 28, which are all expected failures according to the spec.
-        
         const vocalinkSpecTests = [
             { sortCode: '089999', accountNumber: '66374958', expectedResult: true }, // 1
             { sortCode: '107999', accountNumber: '88837491', expectedResult: true }, // 2
@@ -65,14 +63,7 @@ describe('ModulusChecker', () => {
             { sortCode: '070116', accountNumber: '34012583', expectedResult: true },  // 32
             { sortCode: '074456', accountNumber: '11104102', expectedResult: true },  // 33
             { sortCode: '180002', accountNumber: '00000190', expectedResult: true },  // 34
-          ];
-          
-          vocalinkSpecTests.forEach(({ sortCode, accountNumber, expectedResult }, index) => {
-            test(`Vocalink spec test ${index + 1}`, () => {
-              const isValid = validateAccountDetails(sortCode, accountNumber);
-              expect(isValid).toBe(expectedResult);
-            });
-          });
+        ];
 
         vocalinkSpecTests.forEach(({ sortCode, accountNumber, expectedResult }, index) => {
             test(`Vocalink spec test ${index + 1}`, () => {
@@ -100,6 +91,13 @@ describe('ModulusChecker', () => {
             // After exception 14 modification: 18000209747109 (replace pos 6 with 0, which is already 0)
             // MOD11 calculation: 165 % 11 = 0 ✓
             const isValid = validateAccountDetails('180002', '09747109');
+            expect(isValid).toBe(true);
+        });
+    });
+
+    describe('Anglo Irish bank test', () => {
+        test('Sort code 938076 with account number 19304005 should validate', () => {
+            const isValid = validateAccountDetails('938076', '19304005');
             expect(isValid).toBe(true);
         });
     });
