@@ -199,4 +199,3 @@ export const applyPostTotalExceptionRules = (
 
   return { adjustedTotal, postTotalOverwriteResult };
 };
-
