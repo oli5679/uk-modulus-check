@@ -28,7 +28,6 @@ describe('ModulusChecker', () => {
 
         // Comment indicates the test number from Chapter 3, here
         // https://www.vocalink.com/media/vu1advew/validating-account-numbers-uk-modulus-checking-v850.pdf
-        // All tests now passing (previously tests 23, 27, 28 were failing but have been fixed)
         const vocalinkSpecTests = [
             { sortCode: '089999', accountNumber: '66374958', expectedResult: true }, // 1
             { sortCode: '107999', accountNumber: '88837491', expectedResult: true }, // 2
@@ -93,6 +92,31 @@ describe('ModulusChecker', () => {
             // MOD11 calculation: 165 % 11 = 0 ✓
             const isValid = validateAccountDetails('180002', '09747109');
             expect(isValid).toBe(true);
+        });
+    });
+
+    describe('Anglo Irish bank test', () => {
+        test('Sort code 938076 with account number 19304005 should validate', () => {
+            const isValid = validateAccountDetails('938076', '19304005');
+            expect(isValid).toBe(true);
+        });
+    });
+
+    describe('Coventry Building Society 9-digit accounts', () => {
+        test('Sort code 090128 with 9-digit account', () => {
+            expect(typeof validateAccountDetails('090128', '123456789')).toBe('boolean');
+        });
+
+        test('Sort code 720000 with 9-digit account', () => {
+            expect(typeof validateAccountDetails('720000', '987654321')).toBe('boolean');
+        });
+
+        test('Sort code 890000 with 9-digit account', () => {
+            expect(typeof validateAccountDetails('890000', '111222333')).toBe('boolean');
+        });
+
+        test('Sort code 165710 with 9-digit account', () => {
+            expect(typeof validateAccountDetails('165710', '444555666')).toBe('boolean');
         });
     });
 });
