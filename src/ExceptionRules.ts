@@ -121,8 +121,6 @@ export const applyOverwriteExceptionRules = (
   return { modifiedAccountDetails: accountDetails, overwriteResult: null };
 };
 
-// Handle Exception 5 validation logic
-// Exception 5 uses 'some()' logic: account is valid if MOD11 OR DBLAL passes
 const handleException5 = (
   checkType: CheckType | undefined,
   total: number,
