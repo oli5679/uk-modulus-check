@@ -125,6 +125,16 @@ export function validateAccountDetails(
     return true;
   }
 
+  // Exception 5: requires BOTH checks to pass (both MOD11 and DBLAL)
+  // This is because Exception 5 uses check digit matching logic that can create
+  // false positives if only one check passes
+  const hasException5 = matchingModulusWeights.some((w) => w.exception === 5);
+  if (hasException5) {
+    return matchingModulusWeights.every((weight) =>
+      modulusCalculation(weight, sortCode, accountNumber)
+    );
+  }
+
   // Exception 6: requires ALL checks to pass (both MOD11 and DBLAL)
   const hasException6 = matchingModulusWeights.some((w) => w.exception === 6);
   if (hasException6) {
