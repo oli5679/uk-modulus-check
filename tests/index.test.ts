@@ -1,7 +1,7 @@
-import {validateAccountDetails} from '../src';
+import { validateAccountDetails } from '../src';
 
 describe('ModulusChecker', () => {
-    
+
     describe('isValid', () => {
         // Custom tests
         test('should return false for a length 7 sort code', () => {
@@ -98,6 +98,10 @@ describe('ModulusChecker', () => {
     describe('Anglo Irish bank test', () => {
         test('Sort code 938076 with account number 19304005 should validate', () => {
             const isValid = validateAccountDetails('938076', '19304005');
+            expect(isValid).toBe(true);
+        });
+        test('Sort code 938181 with account number 49997163 should validate', () => {
+            const isValid = validateAccountDetails('938181', '49997143');
             expect(isValid).toBe(true);
         });
     });

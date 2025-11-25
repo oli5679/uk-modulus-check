@@ -124,7 +124,7 @@ export const applyOverwriteExceptionRules = (
 const handleException5 = (
   checkType: CheckType | undefined,
   total: number,
-  digitG: number
+  checkDigit: number
 ): boolean | null => {
   const modulusValue =
     checkType === CheckType.MOD11 ? MOD11_VALUE : MOD10_VALUE;
@@ -132,20 +132,19 @@ const handleException5 = (
   const REMAINDER_ZERO = 0;
   const REMAINDER_ONE = 1;
 
-  // Case 1: remainder === 0 && g === 0 (always valid)
-  if (remainder === REMAINDER_ZERO && digitG === REMAINDER_ZERO) {
+  // Case 1: remainder === 0 && checkDigit === 0 (always valid)
+  if (remainder === REMAINDER_ZERO && checkDigit === REMAINDER_ZERO) {
     return true;
   }
 
-  // Case 2: MOD11 - when 11 - remainder === g, return null to let normal check proceed
-  // This prevents false positives where MOD11 would pass but DBLAL fails
+  // Case 2: MOD11 - when 11 - remainder === g, the check digit matches
   if (
     checkType === CheckType.MOD11 &&
     remainder !== REMAINDER_ZERO &&
     remainder !== REMAINDER_ONE &&
-    modulusValue - remainder === digitG
+    modulusValue - remainder === checkDigit
   ) {
-    return null; // Let normal check proceed (will fail, making overall fail)
+    return true; // Check digit matches, account is valid
   }
 
   // Case 3: DBLAL remainder === 1 (special case when MOD11 passes)
@@ -153,12 +152,12 @@ const handleException5 = (
     return true;
   }
 
-  // Case 4: DBLAL - when 10 - remainder === g
+  // Case 4: DBLAL - when 10 - remainder === h, the check digit matches
   if (
     checkType === CheckType.DBLAL &&
     remainder !== REMAINDER_ZERO &&
     remainder !== REMAINDER_ONE &&
-    modulusValue - remainder === digitG
+    modulusValue - remainder === checkDigit
   ) {
     return true;
   }
@@ -193,9 +192,12 @@ export const applyPostTotalExceptionRules = (
 
   // Exception 5: Special validation logic
   if (exception === 5) {
-    const digitG = parseInt(accountDetails[AccountDetailIndex.G], 10);
-    postTotalOverwriteResult = handleException5(checkType, total, digitG);
+    // MOD11 uses checkdigit g, DBLAL uses checkdigit h
+    const checkDigit =
+      checkType === CheckType.MOD11
+        ? parseInt(accountDetails[AccountDetailIndex.G], 10)
+        : parseInt(accountDetails[AccountDetailIndex.H], 10);
+    postTotalOverwriteResult = handleException5(checkType, total, checkDigit);
   }
-
   return { adjustedTotal, postTotalOverwriteResult };
 };
